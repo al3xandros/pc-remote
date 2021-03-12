@@ -23,7 +23,9 @@ Works on all platforms that have Python >= 3.6. Tested on Linux, Windows.
 Install requirements
 
 > pip install -r requirements.txt
+ 
 or
+
 > pip install flask pyautogui
 
 For remote usage allow python to pass through the 
@@ -34,7 +36,9 @@ firewall
 Install requirements
 
 > pip3 install -r requirements.txt
+
 or
+
 > pip3 install flask pyautogui
 
 For remote usage allow a port (default: 5000) in your firewall to let
