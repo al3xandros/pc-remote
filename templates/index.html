@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+</head>
+<body onkeypress="dopress(event)">
+    <button onclick="sep_inc()">+</button>
+    <span>step: {{ step }}</span>
+    <button onclick="sep_dec()">-</button>
+    <br><br><br><br>
+    <textarea id="typewrite" rows="5", cols="30" style="resize: none;"></textarea><br>
+    <button onclick="write1()">typewrite</button>
+    
+    <div class="container">
+    <button class="bt" id="up", onclick="dopress('KeyW')">up</button>
+    <button class="bt" id="right", onclick="dopress('KeyA')">right</button>
+    <button class="bt" id="left", onclick="dopress('KeyD')">left</button>
+    <button class="bt" id="down", onclick="dopress('KeyS')">down</button>
+    <button class="bt" id="click", onclick="dopress('Click')">Click</button>
+    <button class="bt" id="click2", onclick="dopress('Click2')">Click2</button>
+    <button class="bt" id="Enter1", onclick="dopress('Enter1')">Enter1</button>
+    <button class="bt" id="BackSpace", onclick="dopress('BackSpace')">BackSpace</button>
+    </div>
+</body>
+<style type="text/css">
+
+div.container{
+    border: 2px solid black;
+    width: 200px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+button.bt {
+    height: 60px;
+    width: 60px;
+    text-align: center;
+}
+
+button#right{
+    position: absolute;
+    top: 50%;
+    left: 2%;
+    transform: translateY(-50%);
+}
+
+button#left{
+    position: absolute;
+    top: 50%;
+    right: 2%;
+    transform: translateY(-50%);
+}
+
+button#up{
+    position: absolute;
+    top: 2%;
+    right: 50%;
+    transform: translateX(50%);
+}
+
+button#down{
+    position: absolute;
+    bottom: 2%;
+    right: 50%;
+    transform: translateX(50%);
+}
+button#click{
+    position: absolute;
+    left: 2%;
+    bottom: -65px;
+}
+button#Enter1{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -65px;
+}
+button#BackSpace{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -131px;
+}
+button#click2{
+    position: absolute;
+    right: 2%;
+    bottom: -65px;
+    /*transform: translate(50%, -50%);*/
+}
+
+
+</style>
+<script type="text/javascript">
+    let b = document.getElementById('screen')
+    let a = document.getElementById("typewrite")
+    var xhttp = new XMLHttpRequest();
+    function dopress(e){
+        xhttp.open("POST", "", true);
+        if (!e.code){
+            xhttp.send("k;" + e)
+        } else {
+            xhttp.send("k;" + e.code)
+        }
+        
+    }
+    function sep_inc(){
+        xhttp.open("POST", "", true);
+        xhttp.send("s;+")
+    }
+    function sep_dec(){
+        xhttp.open("POST", "", true);
+        xhttp.send("s;-")
+    }
+    function write1(){
+        xhttp.open("POST", "", true);
+        xhttp.send("t;"+ a.value)
+        a.value = ""
+    }
+</script>
+</html>
