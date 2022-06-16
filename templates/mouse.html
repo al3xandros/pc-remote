@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Controll</title>
+</head>
+<body>
+    <button id="send"> send distance</button>
+    <div class="main">
+        <div class="mousepad show">
+        
+        
+        </div>
+        <div class="mouse-btns">
+            <button class="mouse-btn" id="left-click">Left Click</button>    
+            <button class="mouse-btn" id="right-click">Right Click</button>
+        </div>
+    </div>
+
+</body>
+<style type="text/css">
+    .main{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        width: 100%;
+        max-width: 300px;
+        height: 100%;
+        max-height: 360px;
+
+    }
+    .mousepad {
+        width: 100%;
+        height: 100%;
+        max-height: 300px;
+    }
+    .mouse-btns{
+        display: flex;
+        width: 100%;
+        
+    }
+    .mouse-btn{
+        width: 50%;
+        max-width: 150px;
+        height: 60px;
+        align-self: center;
+    }
+
+    .show {
+        border: 1px dashed red;
+    }
+</style>
+<script src="/static/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    
+    let socket = io();
+    socket.on('connect', function() {
+        console.log("Connected")
+    });
+
+    function send_distance(x, y, is_touch){
+        socket.emit("mousemove", JSON.stringify(
+            {
+                is_touch: is_touch,
+                x: x,
+                y: y
+            }
+        ))
+        // mousepad.innerText = `x:${x}, y:${y}`
+        setTimeout(() => {}, 200)
+    }
+
+    var mousepad = document.getElementsByClassName("mousepad")[0]
+    var send = document.getElementById("send")
+    var left_click = document.getElementById("left-click")
+    var right_click = document.getElementById("right-click")
+    var x_start = 0;
+    var y_start = 0;
+    var x_end;
+    var y_end;
+    var touch_move_changes = 0;
+    var touch_send = false;
+
+
+    function handle_touch_input(){
+        if (touch_move_changes == 0){
+            x_start = x_end;
+            y_start = y_end;
+        } else if (touch_move_changes < 5){
+            touch_move_changes++;
+        } else {
+            touch_move_changes = 0
+            send_distance(x_end - x_start ,y_end - y_start, true)
+
+        }
+    }
+
+
+    send.onclick = () => {
+        send_distance(x_end - x_start, y_end - y_start, true)
+    }
+
+
+    mousepad.onmousedown = function(e){
+        let rect = e.target.getBoundingClientRect();
+        let x = Math.floor(e.clientX - rect.left);
+        let y = Math.floor(e.clientY - rect.top);
+        x_start = x;
+        y_start = y;
+    }
+    mousepad.onmouseup = function(e){
+        let rect = e.target.getBoundingClientRect();
+        let x = Math.floor(e.clientX - rect.left);
+        let y = Math.floor(e.clientY - rect.top);
+        send_distance(x - x_start, y - y_start, false)
+    }
+
+
+    mousepad.ontouchstart = function(e){
+        let rect = e.target.getBoundingClientRect();
+        let x = Math.floor(e.touches[0].clientX - rect.left);
+        let y = Math.floor(e.touches[0].clientY - rect.top);
+        x_start = x;
+        y_start = y;
+    }
+
+    mousepad.ontouchmove = function(e){
+        let rect = e.target.getBoundingClientRect();
+        let x = Math.floor(e.touches[0].clientX - rect.left);
+        let y = Math.floor(e.touches[0].clientY - rect.top);
+        x_end = x;
+        y_end = y;
+        if (touch_send){
+            send_distance(x - x_start, y - y_start, true)
+        }
+        touch_send = !touch_send;
+    }
+
+
+    left_click.onclick = (e) => {
+        socket.emit("mouseclick", JSON.stringify(
+            {
+                key:"left"
+            }
+        ))
+    }
+    right_click.onclick = (e) => {
+        socket.emit("mouseclick", JSON.stringify(
+            {
+                key:"right"
+            }
+        ))
+    }
+
+</script>
+</html>
