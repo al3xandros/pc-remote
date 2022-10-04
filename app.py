@@ -18,7 +18,7 @@ def index():
 # --------------------------------- keyboard ---------------------------------
 @app.route("/keyboard/")
 def keyboard():
-    return render_template("keyboard2.html")
+    return render_template("keyboard.html")
 
 
 @socketio.on('keystroke')
@@ -34,7 +34,7 @@ def keystroke(data):
 # --------------------------------- mouse ---------------------------------
 @app.route("/mouse/")
 def mouse():
-    return render_template("mouse2.html")
+    return render_template("mouse.html")
 
 
 @socketio.on('mousemove')
