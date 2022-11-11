@@ -4,7 +4,7 @@ import json
 
 HOST = "0.0.0.0"
 PORT = 5000
-DEBUG  = False
+DEBUG  = not False
 VERBOSE = False
 SECRET_KEY = "Change me to something random!"
 MOUSE_SPEED = 10
@@ -48,8 +48,10 @@ def handle_mousemove(data):
         pg.moveRel(d['x'], d['y'], duration=0.2)
 
 
-
-
 def handle_mouseclick(data):
     d = json.loads(data)
     pg.click(button=d.get('key'))
+
+def handle_text(data):
+    d = json.loads(data)
+    pg.typewrite(d['text'])

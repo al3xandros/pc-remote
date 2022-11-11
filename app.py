@@ -13,6 +13,7 @@ def index():
     return """
 <a href="keyboard">keyboard</a>
 <a href="mouse">mouse</a>
+<a href="text">text</a>
 """
 
 # --------------------------------- keyboard ---------------------------------
@@ -29,6 +30,19 @@ def keystroke(data):
         print("-"*36)
     external.handle_keystroke(data)
 
+
+@app.route("/text/")
+def text():
+    return render_template("text.html")
+
+
+@socketio.on('keystroke')
+def handle_text(data):
+    if external.VERBOSE:
+        print("-"*36)
+        print(repr(data))
+        print("-"*36)
+    external.handle_text(data)
 
 
 # --------------------------------- mouse ---------------------------------

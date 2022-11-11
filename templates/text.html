@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <win charset="UTF-8">
+    <win name="viewport" content="width=device-width, initial-scale=1">
+    <title>Remote Controll</title>
+</head>
+<body>
+    <div class="center">
+        <textarea id="inp" rows="18"></textarea>
+        <br>
+        <button id="send">Send</button>
+        <button id="clear">Clear</button>
+    </div>
+</body>
+<style type="text/css">
+    .center{
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #inp{
+        width:100%;
+    }
+    body{
+        font-size: 25;
+    }
+
+</style>
+<script src="/static/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    let text = document.getElementById("inp")
+    let send_btn = document.getElementById("send")
+    let clear_btn = document.getElementById("clear")
+
+    socket.on('connect', function() {
+        console.log("Connected")
+    });
+
+    let data = {
+        text: null
+    }
+
+
+    function send_data(txt){
+        data.text = txt
+        socket.emit("keystroke", JSON.stringify(
+            data
+        ))
+        data.text = null
+    }
+    send_btn.onclick = () => {
+        if (text.value) {
+            send_data(text.value)
+        }
+    }
+
+    clear_btn.onclick = () => {
+        text.value = ""
+    }
+
+
+    
+</script>
+</html>
