@@ -4,7 +4,7 @@ import json
 
 HOST = "0.0.0.0"
 PORT = 5000
-DEBUG  = not False
+DEBUG  = False
 VERBOSE = False
 SECRET_KEY = "Change me to something random!"
 MOUSE_SPEED = 10
