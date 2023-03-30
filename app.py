@@ -36,7 +36,7 @@ def text():
     return render_template("text.html")
 
 
-@socketio.on('keystroke')
+@socketio.on('text')
 def handle_text(data):
     if external.VERBOSE:
         print("-"*36)

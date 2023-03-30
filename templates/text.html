@@ -45,7 +45,7 @@
 
     function send_data(txt){
         data.text = txt
-        socket.emit("keystroke", JSON.stringify(
+        socket.emit("text", JSON.stringify(
             data
         ))
         data.text = null
